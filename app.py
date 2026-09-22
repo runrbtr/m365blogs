@@ -39,7 +39,8 @@ MAX_JSON = 8 * 1024
 MAX_FORM = 4 * 1024
 CSP = ("default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; "
        "form-action 'self'; base-uri 'none'; frame-ancestors 'none'")
-STATIC = {"style.css": "text/css; charset=utf-8", "app.js": "application/javascript; charset=utf-8"}
+STATIC = {"style.css": "text/css; charset=utf-8", "app.js": "application/javascript; charset=utf-8",
+          "icon.svg": "image/svg+xml"}
 
 REASONS = {200: "OK", 303: "See Other", 400: "Bad Request", 401: "Unauthorized", 403: "Forbidden", 404: "Not Found",
            405: "Method Not Allowed", 409: "Conflict", 413: "Payload Too Large", 415: "Unsupported Media Type",
@@ -186,11 +187,12 @@ def render_auth(mode: str, error: str = "", username: str = "", allow_signup: bo
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>{title} · Post Stream</title>
+<title>{title} · M365Blogs</title>
+<link rel="icon" type="image/svg+xml" href="{build.asset_url("icon.svg")}">
 <link rel="stylesheet" href="{build.asset_url("style.css")}">
 </head><body>
 <main class="login">
-<h1>Post Stream</h1>
+<h1>M365Blogs</h1>
 <p class="sub">{intro}</p>
 <form method="post" action="{action}">
 {err}{fields}

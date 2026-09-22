@@ -319,7 +319,8 @@ def render_page(archive: dict, posts: list) -> str:
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Post Stream</title>
+<title>M365Blogs</title>
+<link rel="icon" type="image/svg+xml" href="{asset_url("icon.svg")}">
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Every new post from Peter van der Woude, Patch My PC, Andrew Taylor, Prajwal Desai and Call4Cloud in one place.">
 <link rel="stylesheet" href="{asset_url("style.css")}">
@@ -328,7 +329,7 @@ def render_page(archive: dict, posts: list) -> str:
 <body>
 <header class="top"><div class="wrap">
   <div class="titlerow">
-    <h1>Post Stream</h1>
+    <h1>M365Blogs</h1>
     <div class="account">
       <span id="whoami" hidden></span>
       <form id="logout" method="post" action="logout" hidden><button class="linkbtn" type="submit">Sign out</button></form>

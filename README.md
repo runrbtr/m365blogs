@@ -1,4 +1,4 @@
-# Post Stream
+# M365Blogs (Post Stream)
 
 **https://m365blogs.runr.is** — one page for every new post on five blogs. Reading is open to everyone; create a
 free account to keep favorites and a "new since last visit" marker across browsers and devices.
