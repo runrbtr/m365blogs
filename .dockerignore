@@ -1,0 +1,9 @@
+data/
+site/
+tests/
+__pycache__/
+*.pyc
+.git/
+.claude/
+README.md
+docker-compose.yml

@@ -1,0 +1,47 @@
+# Production: pulls the image built by GitHub Actions and is exposed only through Traefik.
+# Site address: https://m365blogs.runr.is  (change it with POSTSTREAM_HOST, see .env.example)
+
+networks:
+  external_access:
+    external: true
+
+services:
+  post-stream:
+    image: ghcr.io/runrbtr/post-stream:latest
+    container_name: post-stream
+    restart: unless-stopped
+    networks:
+      - external_access
+    # No "ports:" on purpose. The app trusts the X-Forwarded-* headers Traefik sets (TRUST_PROXY=1),
+    # so it must only be reachable through Traefik. A published port would let anyone bypass Traefik
+    # and forge their address.
+    environment:
+      TRUST_PROXY: "1"
+      PUBLIC_URL: "https://${POSTSTREAM_HOST:-m365blogs.runr.is}"
+      ALLOW_SIGNUP: "${ALLOW_SIGNUP:-1}"
+      MAX_USERS: "${MAX_USERS:-1000}"
+      REFRESH_MINUTES: "30"
+    volumes:
+      - poststream-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.m365blogs.loadbalancer.server.port=8080
+      # plain HTTP: redirect to HTTPS (sign-in sends a password, so it must never travel unencrypted)
+      - traefik.http.routers.m365blogs.rule=Host(`${POSTSTREAM_HOST:-m365blogs.runr.is}`)
+      - traefik.http.routers.m365blogs.middlewares=m365blogs-https
+      - traefik.http.middlewares.m365blogs-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.m365blogs-https.redirectscheme.permanent=true
+      # HTTPS
+      - traefik.http.routers.m365blogs-https.rule=Host(`${POSTSTREAM_HOST:-m365blogs.runr.is}`)
+      - traefik.http.routers.m365blogs-https.tls=true
+      - traefik.http.routers.m365blogs-https.tls.certresolver=cloudflare
+
+volumes:
+  poststream-data:

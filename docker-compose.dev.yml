@@ -1,0 +1,34 @@
+# Local development: builds the image from this folder and listens on 127.0.0.1:8080 only.
+#   docker compose -f docker-compose.dev.yml up -d --build
+
+services:
+  poststream:
+    build: .
+    container_name: poststream
+    restart: unless-stopped
+    ports:
+      # Bound to the host's loopback on purpose: this app speaks plain HTTP, so put HTTPS in front of it
+      # (reverse proxy, Cloudflare Tunnel, Tailscale... see README) and point that at 127.0.0.1:8080.
+      # Only change this to "8080:8080" for use on a trusted home network, never for the open internet.
+      - "127.0.0.1:8080:8080"
+    environment:
+      # Set to "1" ONLY when a reverse proxy in front of this container sets X-Forwarded-For/-Proto/-Host.
+      TRUST_PROXY: "${TRUST_PROXY:-0}"
+      # The address people use, e.g. https://stream.example.com
+      PUBLIC_URL: "${PUBLIC_URL:-}"
+      REFRESH_MINUTES: "30"
+      # Optional first user, created only while there are no users. Remove after first start.
+      # ADMIN_USER: "you"
+      # ADMIN_PASSWORD: "at least 10 characters"
+    volumes:
+      - poststream-data:/data
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  poststream-data:
