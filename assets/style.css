@@ -2,12 +2,14 @@
   --bg: #f6f6f4; --surface: #ffffff; --ink: #1a1c1f; --muted: #575f69; --line: #e1e3e6;
   --link: #0b5fc4; --chip: #eceef1; --warn-bg: #fff3d6; --warn: #8a5500; --ok: #17703a; --bad: #b3261e;
   --fav: #a15c00; --s0: #1a5fb4; --s1: #0d6b63; --s2: #7a3fb0; --s3: #a24a00; --s4: #a8226b;
+  --s5: #1b7a3d; --s6: #ae2b2b; --s7: #7a4a2e; --s8: #7a6a00;
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #101214; --surface: #181b1f; --ink: #e9ebee; --muted: #a2abb5; --line: #2a2f36;
     --link: #7db8ff; --chip: #242a31; --warn-bg: #3a2c0e; --warn: #ffcb6b; --ok: #7ad99a; --bad: #ff9188;
     --fav: #ffcb6b; --s0: #7db8ff; --s1: #66d6ca; --s2: #c9a9f7; --s3: #ffb070; --s4: #ff9cc9;
+    --s5: #7de3a0; --s6: #ff9d94; --s7: #d9a878; --s8: #e0c94a;
   }
 }
 * { box-sizing: border-box; }
@@ -46,6 +48,10 @@ h1 { margin: 0; font-size: 1.7rem; letter-spacing: -0.02em; }
 .fchip[data-s="2"], .chip[data-s="2"] { --c: var(--s2); }
 .fchip[data-s="3"], .chip[data-s="3"] { --c: var(--s3); }
 .fchip[data-s="4"], .chip[data-s="4"] { --c: var(--s4); }
+.fchip[data-s="5"], .chip[data-s="5"] { --c: var(--s5); }
+.fchip[data-s="6"], .chip[data-s="6"] { --c: var(--s6); }
+.fchip[data-s="7"], .chip[data-s="7"] { --c: var(--s7); }
+.fchip[data-s="8"], .chip[data-s="8"] { --c: var(--s8); }
 
 /* banners */
 main { padding-top: 16px; padding-bottom: 40px; }

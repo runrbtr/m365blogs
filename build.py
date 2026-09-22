@@ -54,6 +54,10 @@ SOURCES = [
     Source("staylor", "Andrew Taylor", "https://andrewstaylor.com/", "https://andrewstaylor.com/feed/"),
     Source("prajwal", "Prajwal Desai", "https://www.prajwaldesai.com/blog/", "https://www.prajwaldesai.com/feed/"),
     Source("call4cloud", "Call4Cloud", "https://call4cloud.nl/", "https://call4cloud.nl/feed/"),
+    Source("htmd", "HTMD", "https://www.anoopcnair.com/", "https://www.anoopcnair.com/feed/"),
+    Source("lazyadmin", "The Lazy Administrator", "https://www.thelazyadministrator.com/", "https://www.thelazyadministrator.com/feed/"),
+    Source("woshub", "WOSHUB", "https://woshub.com/", "https://woshub.com/feed/"),
+    Source("c7solutions", "C7 Solutions", "https://c7solutions.com/", "https://c7solutions.com/feed/"),
 ]
 BY_ID = {s.id: s for s in SOURCES}
 ORDER = {s.id: i for i, s in enumerate(SOURCES)}
@@ -89,9 +93,17 @@ def text(fragment: str) -> str:
     return " ".join(html.unescape(_TAG.sub("", fragment)).split())
 
 
+_BOILERPLATE = (
+    # HTMD's feed carries no real content, just this canned CTA on every single post.
+    r"Hello\s*-\s*Here is the new HTMD Blog Article.*?linkedin\.com/company/how-to-manage-devices/?",
+)
+
+
 def excerpt(s: str, n: int = 260) -> str:
     """Trim to a short teaser; add an ellipsis only when the text was actually cut."""
     s = re.sub(r"\s*The post .{0,300}? appeared first on .*$", "", s.strip(), flags=re.S)
+    for pat in _BOILERPLATE:
+        s = re.sub(pat, "", s, flags=re.S | re.I).strip()
     trimmed = re.sub(r"\s*(\[…\]|\[&hellip;\]|\.\.\.|…)\s*$", "", s)
     cut = trimmed != s
     if len(trimmed) > n:
@@ -152,7 +164,7 @@ def asset_url(name: str) -> str:
 # ---------------------------------------------------------------- fetching
 
 def parse_feed(data: bytes, src: Source) -> list:
-    root = ET.fromstring(data)
+    root = ET.fromstring(data.lstrip())  # some feeds (e.g. c7solutions) emit stray bytes before <?xml ...?>
     posts = []
     for it in root.iter("item"):
         f, tags = {}, []
